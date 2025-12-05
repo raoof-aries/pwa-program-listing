@@ -1,0 +1,130 @@
+.programList {
+  min-height: 100vh;
+  padding: var(--page-padding);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.programList__header {
+  margin-bottom: 56px;
+  text-align: center;
+  position: relative;
+  animation: fadeInDown 1s ease-out;
+  max-width: 1000px;
+  width: 100%;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.programList__title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    var(--accent-primary) 50%,
+    var(--accent-tertiary) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.programList__title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary),
+    var(--accent-secondary),
+    transparent
+  );
+  border-radius: 4px;
+  box-shadow: 0 0 30px var(--accent-glow);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.8;
+    width: 120px;
+  }
+  50% {
+    opacity: 1;
+    width: 160px;
+  }
+}
+
+.programList__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1000px;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 968px) {
+  .programList__title {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .programList__header {
+    margin-bottom: 48px;
+  }
+
+  .programList__title {
+    font-size: 2.5rem;
+  }
+
+  .programList__title::after {
+    width: 100px;
+  }
+
+  .programList__grid {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .programList__header {
+    margin-bottom: 40px;
+  }
+
+  .programList__title {
+    font-size: 2rem;
+  }
+
+  .programList__title::after {
+    width: 80px;
+    height: 3px;
+  }
+
+  .programList__grid {
+    gap: 16px;
+  }
+}

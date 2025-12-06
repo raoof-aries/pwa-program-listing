@@ -1,11 +1,14 @@
 import React from "react";
+import "./EmployeeTable.css";
 
 export default function EmployeeTable({ rows }) {
-  if (!rows || rows.length === 0) return <p>No attendees.</p>;
+  if (!rows || rows.length === 0) {
+    return <p className="employeeTable__empty">No attendees.</p>;
+  }
 
   return (
-    <div className="table-wrap">
-      <table className="employee-table">
+    <div className="employeeTable">
+      <table className="employeeTable__table">
         <thead>
           <tr>
             <th>Name</th>

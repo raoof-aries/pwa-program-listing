@@ -1,0 +1,179 @@
+.employeeTable {
+  overflow: auto;
+  background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.employeeTable:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(59, 130, 246, 0.1);
+}
+
+/* Glassmorphism overlay effect */
+.employeeTable::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary),
+    var(--accent-secondary),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.employeeTable:hover::before {
+  opacity: 1;
+}
+
+.employeeTable__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employeeTable__table thead {
+  position: relative;
+}
+
+.employeeTable__table thead::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--card-border),
+    transparent
+  );
+}
+
+.employeeTable__table th,
+.employeeTable__table td {
+  padding: 20px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+
+.employeeTable__table th {
+  font-size: 0.8125rem;
+  color: var(--accent-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-bottom: 24px;
+  background: rgba(59, 130, 246, 0.03);
+}
+
+.employeeTable__table td {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.employeeTable__table tbody tr {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.employeeTable__table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.employeeTable__table tbody tr:hover td {
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+
+.employeeTable__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* First column (Name) styling */
+.employeeTable__table tbody td:first-child {
+  font-weight: 600;
+  color: var(--text-primary);
+  position: relative;
+  padding-left: 20px;
+}
+
+.employeeTable__table tbody td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-secondary)
+  );
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.employeeTable__table tbody tr:hover td:first-child::before {
+  opacity: 1;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.employeeTable__empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .employeeTable {
+    padding: 24px;
+    overflow-x: auto;
+  }
+
+  .employeeTable__table {
+    min-width: 600px;
+  }
+
+  .employeeTable__table th,
+  .employeeTable__table td {
+    padding: 16px 12px;
+    font-size: 0.875rem;
+  }
+
+  .employeeTable__table th {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .employeeTable {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .employeeTable__table th,
+  .employeeTable__table td {
+    padding: 14px 10px;
+  }
+}

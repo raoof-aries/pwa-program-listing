@@ -16,7 +16,6 @@
   box-shadow: var(--shadow-lg), 0 0 40px rgba(59, 130, 246, 0.1);
 }
 
-/* Glassmorphism overlay effect */
 .employeeTable::before {
   content: "";
   position: absolute;
@@ -39,9 +38,27 @@
   opacity: 1;
 }
 
+/* Info section */
+.employeeTable__info {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.employeeTable__info p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Table */
 .employeeTable__table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 24px;
 }
 
 .employeeTable__table thead {
@@ -105,7 +122,6 @@
   border-bottom: none;
 }
 
-/* First column (Name) styling */
 .employeeTable__table tbody td:first-child {
   font-weight: 600;
   color: var(--text-primary);
@@ -145,17 +161,126 @@
 }
 
 /* =========================
+   PAGINATION
+========================= */
+.employeeTable__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--card-border);
+}
+
+.pagination__btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 10px;
+  color: var(--accent-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination__btn:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.pagination__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination__btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pagination__numbers {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination__number {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination__number:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--accent-primary);
+}
+
+.pagination__number--active {
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-secondary)
+  );
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.pagination__number--active:hover {
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-secondary)
+  );
+  color: white;
+}
+
+.pagination__ellipsis {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+/* =========================
    MOBILE OPTIMIZATION
 ========================= */
 
-/* Tablet */
 @media (max-width: 768px) {
   .employeeTable {
     padding: 24px;
     overflow-x: hidden;
   }
 
-  /* Hide Division & Location */
+  .employeeTable__info {
+    padding: 10px 12px;
+  }
+
+  .employeeTable__info p {
+    font-size: 0.8125rem;
+  }
+
   .employeeTable__table th:nth-child(3),
   .employeeTable__table th:nth-child(4),
   .employeeTable__table td:nth-child(3),
@@ -172,9 +297,25 @@
   .employeeTable__table th {
     font-size: 0.75rem;
   }
+
+  .employeeTable__pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pagination__numbers {
+    order: -1;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pagination__btn {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
+  }
 }
 
-/* Small mobile */
 @media (max-width: 480px) {
   .employeeTable {
     padding: 20px;
@@ -184,5 +325,17 @@
   .employeeTable__table th,
   .employeeTable__table td {
     padding: 14px 10px;
+  }
+
+  .pagination__number,
+  .pagination__ellipsis {
+    min-width: 36px;
+    height: 36px;
+    font-size: 0.8125rem;
+  }
+
+  .pagination__btn {
+    padding: 8px 16px;
+    font-size: 0.8125rem;
   }
 }

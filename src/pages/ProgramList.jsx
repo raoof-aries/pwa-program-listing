@@ -1,47 +1,40 @@
 import { Link } from "react-router-dom";
-import { useMemo, useState } from "react";
-import { programs } from "../data/programs";
+import { useEffect, useState, useMemo } from "react";
+import { useProgramContext } from "../context/ProgramContext";
 import ProgramCard from "../components/ProgramCard.jsx";
 import "./ProgramList.css";
 
-// Use dynamic today in real apps
-const TODAY = "2025-12-17";
+const TODAY = new Date().toISOString().split("T")[0];
 
-/* ---------- CALCULATE YESTERDAY ---------- */
 const YESTERDAY = (() => {
-  const d = new Date(TODAY);
+  const d = new Date();
   d.setDate(d.getDate() - 1);
   return d.toISOString().split("T")[0];
 })();
 
 export default function ProgramList() {
-  /* ---------- TODAY PROGRAMS ---------- */
-  const todaysPrograms = useMemo(() => {
-    return programs.filter((p) => p.start.startsWith(TODAY));
-  }, []);
+  const {
+    todayPrograms,
+    pastPrograms,
+    loading,
+    error,
+    fetchTodayPrograms,
+    fetchProgramsByDate,
+  } = useProgramContext();
 
-  /* ---------- FIND LAST PROGRAM DATE BEFORE TODAY ---------- */
-  const lastProgramDate = useMemo(() => {
-    const pastDates = programs
-      .map((p) => p.start.split("T")[0])
-      .filter((date) => date < TODAY);
+  const [pastDate, setPastDate] = useState(YESTERDAY);
 
-    if (pastDates.length === 0) return "";
+  // Fetch today's programs on mount
+  useEffect(() => {
+    fetchTodayPrograms();
+  }, [fetchTodayPrograms]);
 
-    return pastDates.sort((a, b) => new Date(b) - new Date(a))[0];
-  }, []);
-
-  /* ---------- STATE: AUTO-SELECT LAST PROGRAM DATE ---------- */
-  const [pastDate, setPastDate] = useState(lastProgramDate);
-
-  /* ---------- PREVIOUS PROGRAMS (ONLY ONE DATE) ---------- */
-  const pastPrograms = useMemo(() => {
-    if (!pastDate) return [];
-
-    return programs
-      .filter((p) => p.start.startsWith(pastDate))
-      .sort((a, b) => new Date(a.start) - new Date(b.start));
-  }, [pastDate]);
+  // Fetch past programs when date changes
+  useEffect(() => {
+    if (pastDate) {
+      fetchProgramsByDate(pastDate);
+    }
+  }, [pastDate, fetchProgramsByDate]);
 
   return (
     <main className="programList">
@@ -49,13 +42,17 @@ export default function ProgramList() {
       <section className="programSection">
         <h2 className="programSection__title">Today's Programs</h2>
 
-        {todaysPrograms.length === 0 ? (
+        {loading.today ? (
+          <p className="programSection__empty">Loading today's programs...</p>
+        ) : error.today ? (
+          <p className="programSection__empty">Error: {error.today}</p>
+        ) : todayPrograms.length === 0 ? (
           <p className="programSection__empty">
             No programs available for today.
           </p>
         ) : (
           <div className="programList__grid">
-            {todaysPrograms.map((p) => (
+            {todayPrograms.map((p) => (
               <Link to={`/program/${p.id}`} key={p.id} className="link-reset">
                 <ProgramCard program={p} />
               </Link>
@@ -64,7 +61,7 @@ export default function ProgramList() {
         )}
       </section>
 
-      {/* ---------- PREVIOUS (LAST PROGRAM DAY ONLY) ---------- */}
+      {/* ---------- PREVIOUS ---------- */}
       <section className="programSection">
         <div className="programSection__header">
           <h2 className="programSection__title">Previous Programs</h2>
@@ -78,8 +75,14 @@ export default function ProgramList() {
           />
         </div>
 
-        {pastPrograms.length === 0 ? (
-          <p className="programSection__empty">No previous programs found.</p>
+        {loading.past ? (
+          <p className="programSection__empty">Loading programs...</p>
+        ) : error.past ? (
+          <p className="programSection__empty">Error: {error.past}</p>
+        ) : pastPrograms.length === 0 ? (
+          <p className="programSection__empty">
+            No programs found for this date.
+          </p>
         ) : (
           <div className="programList__grid">
             {pastPrograms.map((p) => (

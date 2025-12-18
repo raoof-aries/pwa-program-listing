@@ -4,7 +4,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 80px;
 }
+
+/* =========================
+   MAIN HEADER (IF USED)
+========================= */
 
 .programList__header {
   margin-bottom: 56px;
@@ -77,22 +82,86 @@
   }
 }
 
+/* =========================
+   PROGRAM SECTIONS
+========================= */
+
+.programSection {
+  max-width: 1000px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.programSection__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.programSection__title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff, var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.programSection__date {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.programSection__date::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.8;
+}
+
+.programSection__empty {
+  opacity: 0.7;
+  font-size: 1rem;
+  padding-left: 4px;
+}
+
+/* =========================
+   PROGRAM LIST GRID
+========================= */
+
 .programList__grid {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 1000px;
   width: 100%;
 }
 
-/* Responsive adjustments */
+/* =========================
+   RESPONSIVE
+========================= */
+
 @media (max-width: 968px) {
   .programList__title {
     font-size: 3rem;
   }
+
+  .programSection__title {
+    font-size: 1.9rem;
+  }
 }
 
 @media (max-width: 768px) {
+  .programList {
+    gap: 60px;
+  }
+
   .programList__header {
     margin-bottom: 48px;
   }
@@ -108,9 +177,17 @@
   .programList__grid {
     gap: 20px;
   }
+
+  .programSection__header {
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 480px) {
+  .programList {
+    gap: 48px;
+  }
+
   .programList__header {
     margin-bottom: 40px;
   }
@@ -122,6 +199,10 @@
   .programList__title::after {
     width: 80px;
     height: 3px;
+  }
+
+  .programSection__title {
+    font-size: 1.6rem;
   }
 
   .programList__grid {

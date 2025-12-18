@@ -144,15 +144,23 @@
   font-weight: 500;
 }
 
-/* Responsive table */
+/* =========================
+   MOBILE OPTIMIZATION
+========================= */
+
+/* Tablet */
 @media (max-width: 768px) {
   .employeeTable {
     padding: 24px;
-    overflow-x: auto;
+    overflow-x: hidden;
   }
 
-  .employeeTable__table {
-    min-width: 600px;
+  /* Hide Division & Location */
+  .employeeTable__table th:nth-child(3),
+  .employeeTable__table th:nth-child(4),
+  .employeeTable__table td:nth-child(3),
+  .employeeTable__table td:nth-child(4) {
+    display: none;
   }
 
   .employeeTable__table th,
@@ -166,6 +174,7 @@
   }
 }
 
+/* Small mobile */
 @media (max-width: 480px) {
   .employeeTable {
     padding: 20px;

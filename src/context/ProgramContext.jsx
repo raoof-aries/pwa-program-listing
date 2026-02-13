@@ -1,6 +1,19 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 
 const ProgramContext = createContext();
+
+// Loads runtime config from public/config.json (outside the bundle)
+async function loadConfig() {
+  const response = await fetch(`${import.meta.env.BASE_URL}config.json`);
+  if (!response.ok) throw new Error("Failed to load config.json");
+  return response.json();
+}
 
 export function ProgramProvider({ children }) {
   const [todayPrograms, setTodayPrograms] = useState([]);
@@ -14,7 +27,28 @@ export function ProgramProvider({ children }) {
     past: null,
   });
 
-  const BASE_URL = "https://anukavyam.in/webservices/attendance/index.php";
+  const baseUrlRef = useRef(null);
+  const configLoadedRef = useRef(null); // holds the config promise
+
+  // Ensures config is loaded only once and returns the BASE_URL
+  // On failure, clears the cached promise so the next call retries
+  const getBaseUrl = useCallback(async () => {
+    if (baseUrlRef.current) return baseUrlRef.current;
+
+    if (!configLoadedRef.current) {
+      configLoadedRef.current = loadConfig()
+        .then((config) => {
+          baseUrlRef.current = config.BASE_URL;
+          return config.BASE_URL;
+        })
+        .catch((err) => {
+          configLoadedRef.current = null; // allow retry on next call
+          throw err;
+        });
+    }
+
+    return configLoadedRef.current;
+  }, []);
 
   // Fetch today's programs
   const fetchTodayPrograms = useCallback(async () => {
@@ -22,6 +56,7 @@ export function ProgramProvider({ children }) {
     setError((prev) => ({ ...prev, today: null }));
 
     try {
+      const BASE_URL = await getBaseUrl();
       const response = await fetch(`${BASE_URL}?action=todayPgm`);
       if (!response.ok) throw new Error("Failed to fetch today's programs");
 
@@ -33,7 +68,7 @@ export function ProgramProvider({ children }) {
     } finally {
       setLoading((prev) => ({ ...prev, today: false }));
     }
-  }, []);
+  }, [getBaseUrl]);
 
   // Fetch programs for a specific date
   const fetchProgramsByDate = useCallback(async (date) => {
@@ -46,6 +81,7 @@ export function ProgramProvider({ children }) {
     setError((prev) => ({ ...prev, past: null }));
 
     try {
+      const BASE_URL = await getBaseUrl();
       const response = await fetch(
         `${BASE_URL}?action=dateWisePgm&date=${date}`
       );
@@ -60,7 +96,7 @@ export function ProgramProvider({ children }) {
     } finally {
       setLoading((prev) => ({ ...prev, past: false }));
     }
-  }, []);
+  }, [getBaseUrl]);
 
   // Find a program by ID from both today and past programs
   const findProgramById = useCallback(
